@@ -36,3 +36,8 @@ yarn-error.log*
 
 # local .env files
 .env.local*
+
+# amplify
+.amplify
+amplify_outputs*
+amplifyconfiguration*
