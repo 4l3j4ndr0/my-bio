@@ -1,106 +1,63 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
+  <q-layout
+    view="hHh Lpr fFf"
+    v-if="user.token"
+    :style="$q.platform.is.bex ? 'min-width: 750px; min-height: 500px' : ''"
+  >
+    <q-header class="bg-primary text-white">
       <q-toolbar>
-        <q-btn
-          flat
-          dense
-          round
-          icon="menu"
-          aria-label="Menu"
-          @click="toggleLeftDrawer"
-        />
-
-        <q-toolbar-title>
-          Quasar App
+        <q-toolbar-title class="row">
+          <div
+            class="header-div"
+            v-if="$q.screen.gt.xs"
+            style="cursor: pointer"
+            @click="$router.push('/')"
+          ></div>
         </q-toolbar-title>
-
-        <div>Quasar v{{ $q.version }}</div>
+        <q-chip color="secondary" text-color="white" icon="person">
+          {{ user.username }}
+        </q-chip>
+        <div class="q-gutter-lg">
+          <q-btn
+            @click="closeSession()"
+            flat
+            round
+            dense
+            icon="fas fa-sign-out-alt"
+          />
+        </div>
       </q-toolbar>
     </q-header>
 
-    <q-drawer
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
-    >
-      <q-list>
-        <q-item-label
-          header
-        >
-          Essential Links
-        </q-item-label>
-
-        <EssentialLink
-          v-for="link in linksList"
-          :key="link.title"
-          v-bind="link"
-        />
-      </q-list>
-    </q-drawer>
-
-    <q-page-container>
+    <q-page-container class="bg-grey-2">
       <router-view />
     </q-page-container>
   </q-layout>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import EssentialLink, { EssentialLinkProps } from 'components/EssentialLink.vue';
+import { onBeforeMount, ref, watch } from "vue";
+import { debounce } from "quasar";
+import { useUserStore } from "../stores/User";
+import { useRouter } from "vue-router";
+//@ts-ignore
+import mixin from "../mixins/mixin";
+const { showLoading, hideLoading, showNoty } = mixin();
+const user = useUserStore();
 
-defineOptions({
-  name: 'MainLayout'
-});
-
-const linksList: EssentialLinkProps[] = [
-  {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
-  },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
-  }
-];
-
-const leftDrawerOpen = ref(false);
-
-function toggleLeftDrawer () {
-  leftDrawerOpen.value = !leftDrawerOpen.value;
-}
+const closeSession = async () => {
+  showLoading("Login out...");
+  await user.logOut();
+  hideLoading();
+};
 </script>
+<style>
+.header-div {
+  width: 10%; /* Full width */
+  height: 90px; /* Adjust the height as necessary */
+  background-image: url("icon.png"); /* Path to your PNG image */
+  background-size: cover; /* Cover the entire div area */
+  background-repeat: no-repeat; /* Prevent the image from repeating */
+  background-position: center center; /* Center the image in the div */
+}
+</style>
