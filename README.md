@@ -8,17 +8,6 @@ yarn
 # or
 npm install
 ```
-
-### Start the app in development mode (hot-code reloading, error reporting, etc.)
-```bash
-quasar dev
+## Install sandbox environment
+```npx ampx sandbox --profile <aws-profile>
 ```
-
-
-### Build the app for production
-```bash
-quasar build
-```
-
-### Customize the configuration
-See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-config-js).

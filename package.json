@@ -10,7 +10,8 @@
     "dev": "quasar dev",
     "build": "quasar build",
     "dev-pwa": "quasar dev -m pwa",
-    "build-pwa": "quasar build --mode pwa"
+    "build-pwa": "quasar build --mode pwa",
+    "amplify-sandbox": "npx ampx sandbox --profile sso-personal"
   },
   "dependencies": {
     "@aws-amplify/backend-cli": "^1.0.3",
