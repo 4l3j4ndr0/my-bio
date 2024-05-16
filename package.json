@@ -31,7 +31,9 @@
     "@aws-amplify/backend-cli": "^1.0.3",
     "aws-cdk": "^2.142.0",
     "aws-cdk-lib": "^2.142.0",
-    "constructs": "^10.3.0"
+    "constructs": "^10.3.0",
+    "esbuild": "^0.21.3",
+    "tsx": "^4.10.3"
   },
   "engines": {
     "node": "^20 || ^18 || ^16",
