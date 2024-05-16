@@ -30,7 +30,8 @@
     "@aws-amplify/backend": "^1.0.2",
     "@aws-amplify/backend-cli": "^1.0.3",
     "aws-cdk": "^2.142.0",
-    "aws-cdk-lib": "^2.142.0"
+    "aws-cdk-lib": "^2.142.0",
+    "constructs": "^10.3.0"
   },
   "engines": {
     "node": "^20 || ^18 || ^16",
