@@ -1,0 +1,20 @@
+version: 1
+backend:
+  phases:
+    build:
+      commands:
+        - yarn install --cache-folder .yarn --prefer-offline
+        - npx ampx pipeline-deploy --branch $AWS_BRANCH --app-id $AWS_APP_ID
+frontend:
+  phases:
+    build:
+      commands:
+        - yarn build
+  artifacts:
+    baseDirectory: dist/spa
+    files:
+      - "**/*"
+  cache:
+    paths:
+      - .yarn/**/*
+      - node_modules/**/*
