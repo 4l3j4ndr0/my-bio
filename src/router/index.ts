@@ -24,7 +24,7 @@ export default route(async function (/* { store, ssrContext } */) {
   const hostname: any = window.location.hostname;
   const parts = hostname.split(".");
   const subdomain = parts.length > 2 ? parts.length[0] : "app";
-  console.log(subdomain);
+  console.log(window.location);
 
   const createHistory = process.env.SERVER
     ? createMemoryHistory
