@@ -11,6 +11,7 @@
           ></div>
         </q-toolbar-title>
         <q-btn
+          v-if="user.subdomain"
           color="white"
           text-color="primary"
           glossy
