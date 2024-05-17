@@ -1,6 +1,6 @@
 <template>
   <q-file
-    @input="uploadImage"
+    @update:model-value="uploadImage"
     class="imagen"
     v-show="false"
     v-model="userImage"
@@ -145,6 +145,7 @@
     </div>
     <div class="col-md">
       <bio-component
+        :user-image="userImage"
         :user-name="userName"
         :user-position="userPosition"
         :user-bio="userBio"
@@ -156,16 +157,46 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { onBeforeMount, ref } from "vue";
 //@ts-ignore
 import BioComponent from "components/BioComponent.vue";
 import { useGeneralStore } from "src/stores/General";
+import { useUserStore } from "src/stores/User";
 const general = useGeneralStore();
-const userImage = ref(undefined);
-const userName = ref(undefined);
-const userPosition = ref(undefined);
-const userBio = ref(undefined);
+const user = useUserStore();
+const userImage: any = ref(undefined);
+const userImagePath: any = ref(undefined);
+const userName: any = ref(undefined);
+const userPosition: any = ref(undefined);
+const userBio: any = ref(undefined);
 import mixin from "../mixins/mixin";
+
+onBeforeMount(async () => {
+  showLoading("Loading information...");
+  const userInformation = await general.getUserById(user.userId);
+  hideLoading();
+  if (userInformation) {
+    if (userInformation.credlyUsername) {
+      getCertifications(userInformation.credlyUsername);
+    }
+    console.log(userInformation.socialNetwork);
+    userName.value = userInformation.fullName;
+    userBio.value = userInformation.bio;
+    userPosition.value = userInformation.jobOcupation;
+    userImage.value = await general.getPresignedUrl(userInformation.image);
+    userImagePath.valeu = userInformation.image;
+    userCredlyConnections.value = [
+      {
+        //@ts-ignore
+        credlyUser: userInformation.credlyUsername,
+      },
+    ];
+    userSocialNetworks.value = userInformation.socialNetwork?.map((i: any) =>
+      JSON.parse(i)
+    );
+  }
+});
+
 const { showLoading, hideLoading, showNoty } = mixin();
 
 const userCredlyConnections = ref([
@@ -187,7 +218,7 @@ const getCertifications = async (userName: string) => {
 
 const userCredlyBadges: any = ref([]);
 
-const userSocialNetworks = ref([
+const userSocialNetworks: any = ref([
   {
     icon: "fab fa-linkedin",
     url: "",
@@ -239,11 +270,42 @@ const openSelectFile = () => {
   element[0].click();
 };
 
-const uploadImage = (file: any) => {
-  console.log("FILE", file);
+const uploadImage = async (file: any) => {
+  showLoading("Uploading image...");
+  const response = await general.uploadImageUser(
+    file,
+    `users/${user.userId}/${Date.now()}-${file.name}`
+  );
+  hideLoading();
+  if (response.status) {
+    userImage.value = response.url;
+    userImagePath.value = response.path;
+  }
+  console.log(response);
 };
 
-const onSubmit = () => {};
+const onSubmit = async () => {
+  let socialNetwork = [];
+  for (let i = 0; i < userSocialNetworks.value.length; i++) {
+    if (userSocialNetworks.value[i].show && userSocialNetworks.value[i].url) {
+      socialNetwork.push(JSON.stringify(userSocialNetworks.value[i]));
+    }
+  }
+  showLoading("Saving information...");
+  const response = await general.createuser(
+    user.userId,
+    userImagePath.value,
+    user.email,
+    userName.value,
+    userPosition.value,
+    userBio.value,
+    socialNetwork,
+    userCredlyConnections.value[0].credlyUser
+  );
+  hideLoading();
+
+  console.log(response);
+};
 defineOptions({
   name: "IndexPage",
 });

@@ -3,6 +3,11 @@
 </template>
 
 <script setup lang="ts">
+// Polyfill for 'global' object
+if (typeof global === "undefined") {
+  //@ts-ignore
+  window.global = window;
+}
 import { onBeforeMount, watch } from "vue";
 import { useRouter } from "vue-router";
 import { useUserStore } from "./stores/User";

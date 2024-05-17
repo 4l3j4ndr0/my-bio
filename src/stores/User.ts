@@ -16,7 +16,7 @@ export const useUserStore = defineStore("user", {
   state: () => ({
     user: null,
     token: null,
-    username: "",
+    email: "",
     userId: "",
   }),
   actions: {
@@ -32,7 +32,7 @@ export const useUserStore = defineStore("user", {
             id_token: token.idToken.toString(),
           });
           const { userId, signInDetails } = await getCurrentUser();
-          this.username = signInDetails?.loginId || "";
+          this.email = signInDetails?.loginId || "";
           this.userId = userId;
         }
 

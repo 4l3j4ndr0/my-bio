@@ -15,7 +15,7 @@
           ></div>
         </q-toolbar-title>
         <q-chip color="secondary" text-color="white" icon="person">
-          {{ user.username }}
+          {{ user.email }}
         </q-chip>
         <div class="q-gutter-lg">
           <q-btn
