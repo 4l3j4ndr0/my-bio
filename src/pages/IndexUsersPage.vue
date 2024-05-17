@@ -1,9 +1,6 @@
 <template>
-  <q-layout
-    view="hHh Lpr fFf"
-    :style="$q.platform.is.bex ? 'min-width: 750px; min-height: 500px' : ''"
-  >
-    <q-page-container class="bg-grey-2">
+  <q-layout>
+    <q-page-container>
       <bio-component
         v-if="userInfo"
         :user-image="userImage"

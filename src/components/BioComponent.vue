@@ -1,15 +1,8 @@
 <template>
   <q-page class="flex flex-center">
     <div id="particles-js"></div>
-    <div
-      class="animated bounceInUp"
-      v-bind:style="
-        $q.screen.lt.sm
-          ? { width: '90%', 'padding-top': '100px' }
-          : { width: '45%' }
-      "
-    >
-      <q-card class="bg-white">
+    <div class="animated bounceInUp q-mt-lg">
+      <q-card class="bg-white q-mt-lg" style="margin-top: 50px">
         <q-card-section>
           <q-avatar size="150px" class="absolute-center shadow-19">
             <img class="circle" :src="props.userImage" />
