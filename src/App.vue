@@ -3,6 +3,21 @@
 </template>
 
 <script setup lang="ts">
+import { Amplify } from "aws-amplify";
+//@ts-ignore
+import outputs from "../amplify_outputs.json";
+
+Amplify.configure(outputs);
+const existingConfig = Amplify.getConfig();
+console.log(existingConfig);
+
+Amplify.configure({
+  ...existingConfig,
+  API: {
+    ...existingConfig.API,
+    REST: outputs.custom.API,
+  },
+});
 // Polyfill for 'global' object
 if (typeof global === "undefined") {
   //@ts-ignore
@@ -27,7 +42,6 @@ watch(user, (val) => {
 
 onBeforeMount(async () => {
   Hub.listen("auth", ({ payload }) => {
-    console.log("PAYLOAD::::", payload);
     switch (payload.event) {
       case "signedIn":
         console.log("user have been signedIn successfully.");

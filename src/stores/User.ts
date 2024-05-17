@@ -1,9 +1,6 @@
 import { defineStore } from "pinia";
 import ApiService from "../Helpers/ApiService";
 import { LocalStorage, useQuasar } from "quasar";
-import { Amplify } from "aws-amplify";
-//@ts-ignore
-import outputs from "../../amplify_outputs.json";
 import {
   signIn,
   signOut,
@@ -11,7 +8,6 @@ import {
   getCurrentUser,
 } from "aws-amplify/auth";
 
-Amplify.configure(outputs);
 export const useUserStore = defineStore("user", {
   state: () => ({
     user: null,

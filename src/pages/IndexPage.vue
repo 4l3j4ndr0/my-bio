@@ -55,6 +55,18 @@
             <q-input
               outlined
               dense
+              v-model="userSubdomain"
+              label="Subdomain *"
+              lazy-rules
+              :rules="[
+                (val) => (val && val.length > 0) || 'The value is required.',
+              ]"
+              prefix="https://"
+              suffix=".bio.awslearn.cloud"
+            />
+            <q-input
+              outlined
+              dense
               v-model="userPosition"
               label="Current job ocupation *"
               lazy-rules
@@ -70,6 +82,12 @@
               v-model="userBio"
               label="Short Biography"
               type="textarea"
+              lazy-rules
+              :rules="[
+                (val) =>
+                  (val && val.length > 9) ||
+                  'The value is required at least 10 character.',
+              ]"
               clearable
             />
           </fieldset>
@@ -95,6 +113,8 @@
                       outlined
                       dense
                       style="width: 80%"
+                      :rules="item.show ? [validateUrl] : []"
+                      lazy-rules
                     >
                       <template v-slot:prepend>
                         <q-icon :name="item.icon" />
@@ -121,11 +141,11 @@
               v-model="item.credlyUser"
               outlined
               dense
+              prefix="credly.com/users/"
             >
               <template v-slot:before>
                 <q-icon name="fa-solid fa-globe" />
               </template>
-              <template v-slot:hint> credly.com/users/your-user </template>
               <template v-slot:append>
                 <q-btn
                   round
@@ -157,7 +177,7 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, ref } from "vue";
+import { onBeforeMount, ref, computed, watch } from "vue";
 //@ts-ignore
 import BioComponent from "components/BioComponent.vue";
 import { useGeneralStore } from "src/stores/General";
@@ -169,7 +189,30 @@ const userImagePath: any = ref(undefined);
 const userName: any = ref(undefined);
 const userPosition: any = ref(undefined);
 const userBio: any = ref(undefined);
+const userSubdomain: any = ref(undefined);
+const sanitizeForSubdomain = (value: any) => {
+  const allowedCharacters = /^[a-zA-Z0-9 ]+$/; // Include space in allowed characters
+  return value
+    .split("")
+    .filter((char: any) => allowedCharacters.test(char) || char === " ")
+    .join("")
+    .replace(/\s+/g, "-") // Replace consecutive spaces with a single hyphen
+    .toLowerCase(); // Convert to lowercase
+};
+
+// Watch the userName for changes and sanitize it immediately
+watch(userName, (newValue, oldValue) => {
+  const sanitized = sanitizeForSubdomain(newValue);
+  userSubdomain.value = sanitized; // Keep userSubdomain in sync
+});
+
 import mixin from "../mixins/mixin";
+
+const validateUrl = (val: string) => {
+  const pattern =
+    /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/;
+  return pattern.test(val) || "Please enter a valid URL";
+};
 
 onBeforeMount(async () => {
   showLoading("Loading information...");
@@ -179,12 +222,12 @@ onBeforeMount(async () => {
     if (userInformation.credlyUsername) {
       getCertifications(userInformation.credlyUsername);
     }
-    console.log(userInformation.socialNetwork);
     userName.value = userInformation.fullName;
     userBio.value = userInformation.bio;
     userPosition.value = userInformation.jobOcupation;
     userImage.value = await general.getPresignedUrl(userInformation.image);
-    userImagePath.valeu = userInformation.image;
+    userImagePath.value = userInformation.image;
+    userSubdomain.value = userInformation.subdomain;
     userCredlyConnections.value = [
       {
         //@ts-ignore
@@ -207,10 +250,10 @@ const userCredlyConnections = ref([
 
 const getCertifications = async (userName: string) => {
   if (!userName) return;
-  const response = await general.getCredlyCertifications(userName);
+  const response: any = await general.getCredlyCertifications(userName);
   if (response.status) {
     userCredlyBadges.value = response.badges;
-    showNoty("success", response.message);
+    // showNoty("success", response.message);
   } else {
     showNoty("error", response.message);
   }
@@ -287,24 +330,27 @@ const uploadImage = async (file: any) => {
 const onSubmit = async () => {
   let socialNetwork = [];
   for (let i = 0; i < userSocialNetworks.value.length; i++) {
-    if (userSocialNetworks.value[i].show && userSocialNetworks.value[i].url) {
-      socialNetwork.push(JSON.stringify(userSocialNetworks.value[i]));
-    }
+    socialNetwork.push(JSON.stringify(userSocialNetworks.value[i]));
   }
   showLoading("Saving information...");
-  const response = await general.createuser(
+  const response = await general.saveUserInformation(
     user.userId,
     userImagePath.value,
     user.email,
     userName.value,
+    userSubdomain.value.trim(),
     userPosition.value,
     userBio.value,
     socialNetwork,
     userCredlyConnections.value[0].credlyUser
   );
-  hideLoading();
+  if (response.status) {
+    showNoty("success", response.message);
+  } else {
+    showNoty("error", response.message);
+  }
 
-  console.log(response);
+  hideLoading();
 };
 defineOptions({
   name: "IndexPage",
