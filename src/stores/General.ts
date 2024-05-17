@@ -1,5 +1,4 @@
 import { defineStore } from "pinia";
-import ApiService from "../Helpers/ApiService";
 import { get } from "aws-amplify/api";
 import { uploadData, getUrl } from "aws-amplify/storage";
 import { generateClient } from "aws-amplify/data";
@@ -110,6 +109,7 @@ export const useGeneralStore = defineStore("general", {
           message: `The subdomain ${subdomain} is already in use.`,
         };
       }
+      user.setSubdomain(subdomain);
       if (this.action === "create") {
         const { errors, data: newUser } = await client.models.User.create({
           id,
@@ -167,8 +167,19 @@ export const useGeneralStore = defineStore("general", {
 
       if (data?.id) {
         this.action = "update";
+        user.setSubdomain(data.subdomain);
       }
       return data ? data : null;
+    },
+    async getUserBySubdomain(subdomain: string) {
+      const { data, errors } = await client.models.User.list({
+        filter: {
+          subdomain: { eq: subdomain },
+        },
+        authMode: "apiKey",
+      });
+
+      return data && data.length > 0 ? data[0] : null;
     },
   },
 });

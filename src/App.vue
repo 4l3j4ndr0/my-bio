@@ -9,7 +9,6 @@ import outputs from "../amplify_outputs.json";
 
 Amplify.configure(outputs);
 const existingConfig = Amplify.getConfig();
-console.log(existingConfig);
 
 Amplify.configure({
   ...existingConfig,

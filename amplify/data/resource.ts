@@ -14,10 +14,10 @@ const schema = a.schema({
       credlyUsername: a.string(),
     })
     .authorization((allow) => [
+      allow.publicApiKey().to(["read"]),
       allow
         .authenticated("userPools")
-        .to(["create", "update", "delete", "read"]),
-      allow.guest().to(["read"]),
+        .to(["create", "get", "list", "update", "delete"]),
     ]),
 });
 
@@ -27,5 +27,9 @@ export const data = defineData({
   schema,
   authorizationModes: {
     defaultAuthorizationMode: "userPool",
+    apiKeyAuthorizationMode: {
+      description: "This is the API key if for request Publics.",
+      expiresInDays: 30,
+    },
   },
 });

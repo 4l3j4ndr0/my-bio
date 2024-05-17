@@ -1,9 +1,5 @@
 <template>
-  <q-layout
-    view="hHh Lpr fFf"
-    v-if="user.token"
-    :style="$q.platform.is.bex ? 'min-width: 750px; min-height: 500px' : ''"
-  >
+  <q-layout view="hHh Lpr fFf" v-if="user.token">
     <q-header class="bg-primary text-white">
       <q-toolbar>
         <q-toolbar-title class="row">
@@ -14,9 +10,28 @@
             @click="$router.push('/')"
           ></div>
         </q-toolbar-title>
-        <q-chip color="secondary" text-color="white" icon="person">
+        <q-btn
+          color="white"
+          text-color="primary"
+          glossy
+          unelevated
+          icon="fa-solid fa-globe"
+          no-caps
+          :label="`https://${user.subdomain}.bio.awslearn.cloud`"
+          rounded
+          @click="openSite()"
+          size="lg"
+          class="q-mr-lg"
+        />
+        <q-chip
+          color="secondary"
+          text-color="white"
+          icon="person"
+          class="q-ml-lg"
+        >
           {{ user.email }}
         </q-chip>
+
         <div class="q-gutter-lg">
           <q-btn
             @click="closeSession()"
@@ -36,15 +51,14 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, ref, watch } from "vue";
-import { debounce } from "quasar";
 import { useUserStore } from "../stores/User";
-import { useRouter } from "vue-router";
 //@ts-ignore
 import mixin from "../mixins/mixin";
 const { showLoading, hideLoading, showNoty } = mixin();
 const user = useUserStore();
-
+const openSite = () => {
+  window.open(`https://${user.subdomain}.bio.awslearn.cloud`);
+};
 const closeSession = async () => {
   showLoading("Login out...");
   await user.logOut();
@@ -53,7 +67,7 @@ const closeSession = async () => {
 </script>
 <style>
 .header-div {
-  width: 10%; /* Full width */
+  width: 20%; /* Full width */
   height: 90px; /* Adjust the height as necessary */
   background-image: url("icon.png"); /* Path to your PNG image */
   background-size: cover; /* Cover the entire div area */

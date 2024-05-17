@@ -163,7 +163,7 @@
         </q-form>
       </div>
     </div>
-    <div class="col-md">
+    <div class="col-md-8">
       <bio-component
         :user-image="userImage"
         :user-name="userName"

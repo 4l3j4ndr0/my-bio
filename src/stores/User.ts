@@ -14,6 +14,7 @@ export const useUserStore = defineStore("user", {
     token: null,
     email: "",
     userId: "",
+    subdomain: null,
   }),
   actions: {
     async currentSession() {
@@ -37,15 +38,6 @@ export const useUserStore = defineStore("user", {
         console.log(err);
       }
     },
-    async logIn(username: string, password: string) {
-      try {
-        const { isSignedIn, nextStep } = await signIn({ username, password });
-        return isSignedIn;
-      } catch (error) {
-        console.log("error signing in", error);
-        return error;
-      }
-    },
     async logOut() {
       try {
         await signOut({ global: true });
@@ -58,6 +50,9 @@ export const useUserStore = defineStore("user", {
     },
     setToken(token: any) {
       this.token = token;
+    },
+    setSubdomain(subdomain: any) {
+      this.subdomain = subdomain;
     },
   },
 });
