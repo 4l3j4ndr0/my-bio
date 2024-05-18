@@ -1,8 +1,8 @@
 {
   "name": "my-bio",
   "version": "0.0.1",
-  "description": "my-bio amplify Gen 2",
-  "productName": "my-bio",
+  "description": "Create your unique biography with BIO Platform. Showcase your knowledge, certifications, and social links on a personal site that tells your professional story.",
+  "productName": "BIO Platform",
   "author": "4l3j4ndr0 <alejandro.casta3447@gmail.com>",
   "private": true,
   "scripts": {
