@@ -11,7 +11,11 @@
     >
       <q-card class="bg-white q-mt-lg" style="margin-top: 50px">
         <q-card-section>
-          <q-avatar size="150px" class="absolute-center shadow-19">
+          <q-avatar
+            style="height: initial; border-radius: 40px"
+            size="125px"
+            class="absolute-center shadow-19"
+          >
             <img class="circle" :src="props.userImage" />
           </q-avatar>
         </q-card-section>

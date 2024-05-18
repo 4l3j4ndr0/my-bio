@@ -25,7 +25,7 @@
         ></q-avatar>
         <q-avatar
           v-else
-          style="cursor: pointer"
+          style="cursor: pointer; height: initial; border-radius: 40px"
           rounded
           size="100px"
           font-size="82px"
