@@ -54,6 +54,8 @@
 import { useUserStore } from "../stores/User";
 //@ts-ignore
 import mixin from "../mixins/mixin";
+import { useRouter } from "vue-router";
+const router = useRouter();
 const { showLoading, hideLoading, showNoty } = mixin();
 const user = useUserStore();
 const openSite = () => {
@@ -62,7 +64,7 @@ const openSite = () => {
 const closeSession = async () => {
   showLoading("Login out...");
   await user.logOut();
-
+  router.push("/login");
   hideLoading();
 };
 </script>
