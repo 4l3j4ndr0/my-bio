@@ -70,7 +70,7 @@ const closeSession = async () => {
 .header-div {
   width: 20%; /* Full width */
   height: 90px; /* Adjust the height as necessary */
-  background-image: url("icon.png"); /* Path to your PNG image */
+  background-image: url("https://app.bio.awslearn.cloud/icon.png"); /* Path to your PNG image */
   background-size: cover; /* Cover the entire div area */
   background-repeat: no-repeat; /* Prevent the image from repeating */
   background-position: center center; /* Center the image in the div */
