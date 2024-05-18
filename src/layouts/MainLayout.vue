@@ -21,7 +21,6 @@
           :label="`https://${user.subdomain}.bio.awslearn.cloud`"
           rounded
           @click="openSite()"
-          size="lg"
           class="q-mr-lg"
         />
         <q-chip
@@ -63,6 +62,7 @@ const openSite = () => {
 const closeSession = async () => {
   showLoading("Login out...");
   await user.logOut();
+
   hideLoading();
 };
 </script>

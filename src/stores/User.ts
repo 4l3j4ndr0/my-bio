@@ -42,6 +42,7 @@ export const useUserStore = defineStore("user", {
       try {
         await signOut({ global: true });
         LocalStorage.clear();
+        this.setSubdomain(null);
         return true;
       } catch (error) {
         console.log("error signing out: ", error);

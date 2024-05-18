@@ -99,7 +99,7 @@
             </legend>
             <q-expansion-item
               expand-separator
-              label="The social neetworks will show in your Bio web page."
+              label="Display your social networks prominently on your BIO webpage"
             >
               <q-card>
                 <div v-for="(item, i) in userSocialNetworks">
@@ -328,6 +328,9 @@ const uploadImage = async (file: any) => {
 };
 
 const onSubmit = async () => {
+  if (!userImage.value) {
+    showNoty("error", "The user image is required.");
+  }
   let socialNetwork = [];
   for (let i = 0; i < userSocialNetworks.value.length; i++) {
     socialNetwork.push(JSON.stringify(userSocialNetworks.value[i]));
