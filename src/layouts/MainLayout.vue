@@ -64,8 +64,8 @@ const openSite = () => {
 const closeSession = async () => {
   showLoading("Login out...");
   await user.logOut();
-  router.push("/login");
   hideLoading();
+  router.push("/login");
 };
 </script>
 <style>
