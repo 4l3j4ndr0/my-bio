@@ -48,7 +48,7 @@ export default route(async function (
 
   Router.beforeEach(async (to, from, next) => {
     const cookies = process.env.SERVER ? Cookies.parseSSR(ssrContext) : Cookies;
-    const token: any = cookies.get("token");
+    const token: any = user.token || cookies.get("token");
 
     if (subdomain === "app") {
       if (to.path === "/login") {
