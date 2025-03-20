@@ -23,7 +23,10 @@ export default route(async function (
   /* { store, ssrContext } */ { ssrContext }
 ) {
   const user = useUserStore();
-  const hostname: string = ssrContext?.req?.headers?.host || "app.localhost";
+  let hostname = window.location.hostname;
+  if (ssrContext) {
+    hostname = ssrContext?.req?.headers?.host || "app.localhost";
+  }
 
   const parts = hostname.split(".");
   const subdomain = parts.length > 2 ? parts[0] : "app";
