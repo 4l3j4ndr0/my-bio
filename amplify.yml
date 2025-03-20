@@ -13,8 +13,10 @@ frontend:
         - npm run build
     build:
       commands:
-        - cp -r node_modules dist/ssr/node_modules
-        - cd dist/ssr
+        - npm run build
+        - ls -la dist # Para verificar contenido
+        - ls -la dist/ssr # Para verificar contenido
+        - ls -la .amplify-hosting # Para verificar si el manifiesto está aquí
   artifacts:
     baseDirectory: dist/ssr
     files:
