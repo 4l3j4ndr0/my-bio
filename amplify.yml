@@ -13,7 +13,7 @@ frontend:
         - npm run build
     build:
       commands:
-        - cd /dist/ssr
+        - cd dist/ssr
         - npm i
   artifacts:
     baseDirectory: dist/ssr
