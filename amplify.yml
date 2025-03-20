@@ -13,8 +13,8 @@ frontend:
         - npm run build
     build:
       commands:
+        - cp -r node_modules dist/ssr/node_modules
         - cd dist/ssr
-        - npm i
   artifacts:
     baseDirectory: dist/ssr
     files:
