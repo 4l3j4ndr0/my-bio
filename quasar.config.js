@@ -13,7 +13,7 @@ const { configure } = require("quasar/wrappers");
 module.exports = configure(function (/* ctx */) {
   return {
     // https://v2.quasar.dev/quasar-cli-vite/prefetch-feature
-    // preFetch: true,
+    preFetch: false,
 
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
@@ -60,7 +60,14 @@ module.exports = configure(function (/* ctx */) {
       // polyfillModulePreload: true,
       // distDir
 
-      // extendViteConf (viteConf) {},
+      extendViteConf(viteConf, { isClient }) {
+        if (isClient) {
+          viteConf.define = {
+            ...viteConf.define,
+            global: "globalThis",
+          };
+        }
+      },
       // viteVuePluginOptions: {},
 
       // vitePlugins: [
@@ -109,6 +116,8 @@ module.exports = configure(function (/* ctx */) {
         "Dialog",
         "LocalStorage",
         "SessionStorage",
+        "Meta",
+        "Cookies",
       ],
     },
 
@@ -133,7 +142,12 @@ module.exports = configure(function (/* ctx */) {
       // ssrPwaHtmlFilename: 'offline.html', // do NOT use index.html as name!
       // will mess up SSR
 
-      // extendSSRWebserverConf (esbuildConf) {},
+      extendSSRWebserverConf(esbuildConf) {
+        esbuildConf.define = {
+          ...esbuildConf.define,
+          global: "globalThis",
+        };
+      },
       // extendPackageJson (json) {},
 
       pwa: false,

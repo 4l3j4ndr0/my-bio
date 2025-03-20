@@ -4,6 +4,7 @@ const schema = a.schema({
   User: a
     .model({
       id: a.id().required(),
+      color: a.string(),
       image: a.string().required(),
       email: a.string().required(),
       fullName: a.string().required(),
@@ -29,7 +30,7 @@ export const data = defineData({
     defaultAuthorizationMode: "userPool",
     apiKeyAuthorizationMode: {
       description: "This is the API key if for request Publics.",
-      expiresInDays: 30,
+      expiresInDays: 300,
     },
   },
 });

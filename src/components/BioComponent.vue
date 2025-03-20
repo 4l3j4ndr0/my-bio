@@ -1,6 +1,6 @@
 <template>
   <q-page class="flex flex-center">
-    <div id="particles-js"></div>
+    <div id="particles-js" :style="particlesStyle"></div>
     <div
       class="animated bounceInUp q-mt-lg"
       v-bind:style="
@@ -71,12 +71,12 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, onMounted } from "vue";
-import { Certifications, SocialNetworks } from "./models";
-import { useQuasar } from "quasar";
+import { computed, onMounted, onBeforeMount, watch } from "vue";
+import { useQuasar, setCssVar } from "quasar";
 const $q = useQuasar();
 interface Props {
   userImage?: string;
+  primaryColor?: string;
   userName?: string;
   userPosition?: string;
   userBio?: string;
@@ -87,6 +87,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   //@ts-ignore
   userImage: () => new URL("../../avatar.png", import.meta.url).href,
+  primaryColor: () => "#336187",
   userName: () => "Jhon Doe",
   userPosition: () => "AWS Architect",
   userBio: () =>
@@ -99,7 +100,22 @@ const redirectToNetwork = (url: string) => {
   window.open(url);
 };
 
-onMounted(() => {
+onBeforeMount(() => {
+  setCssVar("primary", props.primaryColor);
+});
+
+const particlesStyle = computed(() => ({
+  position: "absolute" as const,
+  width: "100%",
+  height: "100%",
+  background: `linear-gradient(145deg, ${props.primaryColor} 15%, #030303 70%)`,
+  backgroundRepeat: "no-repeat",
+  backgroundSize: "cover",
+  backgroundPosition: "50% 50%",
+  transition: "background 0.3s ease", // Añadir transición suave
+}));
+
+const initParticles = () => {
   //@ts-ignore
   particlesJS("particles-js", {
     particles: {
@@ -206,16 +222,9 @@ onMounted(() => {
     },
     retina_detect: true,
   });
+};
+
+onMounted(() => {
+  initParticles();
 });
 </script>
-<style>
-#particles-js {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(145deg, rgb(74, 94, 137) 15%, #030303 70%);
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: 50% 50%;
-}
-</style>

@@ -3,6 +3,7 @@
     <q-page-container>
       <bio-component
         v-if="userInfo"
+        :primary-color="primaryColor"
         :user-image="userImage"
         :user-name="userInfo.fullName"
         :user-position="userInfo.jobOcupation"
@@ -16,6 +17,7 @@
 
 <script setup lang="ts">
 import { onBeforeMount, ref } from "vue";
+import { useMeta } from "quasar";
 //@ts-ignore
 import BioComponent from "components/BioComponent.vue";
 //@ts-ignore
@@ -31,6 +33,7 @@ const userInfo: any = ref(null);
 const userImage: any = ref(null);
 const userSocialNetworks: any = ref([]);
 const userCredlyBadges: any = ref(null);
+const primaryColor = ref("#402d6b");
 
 onBeforeMount(async () => {
   showLoading("Loading information...");
@@ -42,6 +45,10 @@ onBeforeMount(async () => {
     if (user) {
       userInfo.value = user;
       userImage.value = await general.getPresignedUrl(user.image);
+      if (user?.color) {
+        primaryColor.value = user.color;
+      }
+
       userSocialNetworks.value = user.socialNetwork?.map((i: any) =>
         JSON.parse(i)
       );
@@ -54,6 +61,55 @@ onBeforeMount(async () => {
           // showNoty("success", response.message);
         }
       }
+      useMeta({
+        title: `${user.fullName}`,
+        meta: {
+          keywords: {
+            name: "keywords",
+            content: `${user.fullName} - ${user.jobOcupation}`,
+          },
+          description: {
+            name: "description",
+            content: `${user.fullName} - ${user.jobOcupation}`,
+          },
+          ogType: {
+            property: "og:type",
+            content: "website",
+          },
+          ogUrl: {
+            property: "og:url",
+            content: `${window.location.href}`,
+          },
+          ogTitle: {
+            property: "og:title",
+            content: `${user.fullName} - ${user.jobOcupation}`,
+          },
+          ogDescription: {
+            property: "og:description",
+            content: `${user.fullName} - ${user.jobOcupation}`,
+          },
+          ogImage: {
+            property: "og:image",
+            content: userImage.value,
+          },
+          twiterCard: {
+            name: "twitter:card",
+            content: "summary_large_image",
+          },
+          twitterTitle: {
+            name: "twitter:title",
+            content: `${user.fullName} - ${user.jobOcupation}`,
+          },
+          twitterDescription: {
+            name: "twitter:description",
+            content: `${user.fullName} - ${user.jobOcupation}`,
+          },
+          twitterImage: {
+            name: "twitter:image",
+            content: userImage.value,
+          },
+        },
+      });
     } else {
       router.push("/not-found");
     }

@@ -20,11 +20,37 @@ export const handler: APIGatewayProxyHandler = async (event: any) => {
 
     let badges = [];
     for (let i = 0; i < response.data.data.length; i++) {
-      badges.push({
-        image: response.data.data[i].image_url,
-        url: `https://www.credly.com/badges/${response.data.data[i].id}/public_url`,
-      });
+      const badge = response.data.data[i];
+      // Filter out expired badges by checking if it has no expiration_date
+      // or if the expiration_date is in the future
+      if (
+        !badge.expires_at_date ||
+        new Date(badge.expires_at_date) > new Date()
+      ) {
+        badges.push({
+          image: badge.image_url,
+          url: `https://www.credly.com/badges/${badge.id}/public_url`,
+          // Store the badge name for sorting purposes
+          name: badge.badge_template?.name || "",
+        });
+      }
     }
+
+    // Sort badges to prioritize those containing "AWS Certified" in the name
+    badges.sort((a, b) => {
+      const aHasAWS = a.name.includes("AWS Certified");
+      const bHasAWS = b.name.includes("AWS Certified");
+
+      // If one has "AWS Certified" and the other doesn't, prioritize the one with it
+      if (aHasAWS && !bHasAWS) return -1;
+      if (!aHasAWS && bHasAWS) return 1;
+
+      // If both or neither have "AWS Certified", maintain original order
+      return 0;
+    });
+
+    // Remove the temporary name property used for sorting
+    badges = badges.map(({ image, url }) => ({ image, url }));
 
     return {
       statusCode: 200,
@@ -38,10 +64,4 @@ export const handler: APIGatewayProxyHandler = async (event: any) => {
       body: JSON.stringify(error),
     };
   }
-
-  return {
-    statusCode: 200,
-    headers,
-    body: JSON.stringify("Hello from myFunction!"),
-  };
 };

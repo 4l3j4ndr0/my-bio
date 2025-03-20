@@ -4,6 +4,7 @@ import { uploadData, getUrl } from "aws-amplify/storage";
 import { generateClient } from "aws-amplify/data";
 import { type Schema } from "../../amplify/data/resource";
 import { useUserStore } from "./User";
+import { log } from "console";
 const client = generateClient<Schema>();
 const user = useUserStore();
 export const useGeneralStore = defineStore("general", {
@@ -94,6 +95,7 @@ export const useGeneralStore = defineStore("general", {
     },
     async saveUserInformation(
       id: string,
+      color: string,
       image: string,
       email: string,
       fullName: string,
@@ -113,6 +115,7 @@ export const useGeneralStore = defineStore("general", {
       if (this.action === "create") {
         const { errors, data: newUser } = await client.models.User.create({
           id,
+          color,
           image,
           email,
           fullName,
@@ -137,6 +140,7 @@ export const useGeneralStore = defineStore("general", {
       } else {
         const { errors, data: updatedUser } = await client.models.User.update({
           id,
+          color,
           image,
           email,
           fullName,
@@ -180,6 +184,13 @@ export const useGeneralStore = defineStore("general", {
       });
 
       return data && data.length > 0 ? data[0] : null;
+    },
+    getMetadata() {
+      return {
+        title: "BIO Platform",
+        description:
+          "Create your unique biography with BIO Platform. Showcase your knowledge, certifications, and social links on a personal site that tells your professional story.",
+      };
     },
   },
 });

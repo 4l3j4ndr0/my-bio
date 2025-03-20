@@ -1,12 +1,8 @@
 import { defineStore } from "pinia";
-import ApiService from "../Helpers/ApiService";
-import { LocalStorage, useQuasar } from "quasar";
-import {
-  signIn,
-  signOut,
-  fetchAuthSession,
-  getCurrentUser,
-} from "aws-amplify/auth";
+import { LocalStorage } from "quasar";
+import { Cookies } from "quasar";
+
+import { signOut, fetchAuthSession, getCurrentUser } from "aws-amplify/auth";
 
 export const useUserStore = defineStore("user", {
   state: () => ({
@@ -20,7 +16,6 @@ export const useUserStore = defineStore("user", {
     async currentSession() {
       try {
         let token: any = (await fetchAuthSession()).tokens ?? {};
-
         if (token && token.idToken) {
           LocalStorage.set("token", {
             id_token: token.idToken.toString(),
@@ -31,6 +26,7 @@ export const useUserStore = defineStore("user", {
           const { userId, signInDetails } = await getCurrentUser();
           this.email = signInDetails?.loginId || "";
           this.userId = userId;
+          Cookies.set("token", token);
         }
 
         return token;
@@ -43,6 +39,7 @@ export const useUserStore = defineStore("user", {
         await signOut({ global: true });
         LocalStorage.clear();
         this.setSubdomain(null);
+        Cookies.remove("token");
         return true;
       } catch (error) {
         console.log("error signing out: ", error);

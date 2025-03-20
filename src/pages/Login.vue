@@ -1,7 +1,5 @@
 <template>
-  <q-layout
-    :style="$q.platform.is.bex ? 'min-width: 750px; min-height: 500px' : ''"
-  >
+  <q-layout style="min-height: 500px">
     <q-page-container>
       <q-page class="flex bg-image flex-center">
         <q-card>
@@ -25,13 +23,11 @@
 <script setup lang="ts">
 import { Authenticator } from "@aws-amplify/ui-vue";
 import "@aws-amplify/ui-vue/styles.css";
-import { useQuasar } from "quasar";
-//@ts-ignore
-declare var chrome;
-import { ref } from "vue";
-import { useUserStore } from "../stores/User";
-const $q: any = useQuasar();
-const user = useUserStore();
+import { useMeta } from "quasar";
+import { useGeneralStore } from "src/stores/General";
+const general = useGeneralStore();
+const metaData = general.getMetadata();
+useMeta(metaData);
 </script>
 
 <style>

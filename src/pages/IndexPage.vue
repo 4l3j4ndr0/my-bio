@@ -38,6 +38,29 @@
       </div>
       <div class="row justify-center q-py-md">
         <q-form @submit="onSubmit" class="q-gutter-sm" style="width: 80%">
+          <q-input
+            label="Your favorite color"
+            v-model="color"
+            class="my-input"
+            outlined
+            dense
+            lazy-rules
+            :rules="[
+                (val:any) => (val && val.length > 0) || 'The value is required.',
+              ]"
+          >
+            <template v-slot:append>
+              <q-icon name="colorize" class="cursor-pointer">
+                <q-popup-proxy
+                  cover
+                  transition-show="scale"
+                  transition-hide="scale"
+                >
+                  <q-color v-model="color" />
+                </q-popup-proxy>
+              </q-icon>
+            </template>
+          </q-input>
           <fieldset>
             <legend>
               <div class="text-subtitle1 ft"><b>Personal information</b></div>
@@ -49,7 +72,7 @@
               label="Full name *"
               lazy-rules
               :rules="[
-                (val) => (val && val.length > 0) || 'The value is required.',
+                (val:any) => (val && val.length > 0) || 'The value is required.',
               ]"
             />
             <q-input
@@ -59,7 +82,7 @@
               label="Subdomain *"
               lazy-rules
               :rules="[
-                (val) => (val && val.length > 0) || 'The value is required.',
+                (val:any) => (val && val.length > 0) || 'The value is required.',
               ]"
               prefix="https://"
               suffix=".bio.awslearn.cloud"
@@ -71,7 +94,7 @@
               label="Current job ocupation *"
               lazy-rules
               :rules="[
-                (val) => (val && val.length > 0) || 'The value is required.',
+                (val:any) => (val && val.length > 0) || 'The value is required.',
               ]"
             />
 
@@ -84,7 +107,7 @@
               type="textarea"
               lazy-rules
               :rules="[
-                (val) =>
+                (val:any) =>
                   (val && val.length > 9) ||
                   'The value is required at least 10 character.',
               ]"
@@ -165,6 +188,7 @@
     </div>
     <div class="col-md-8">
       <bio-component
+        :primary-color="color"
         :user-image="userImage"
         :user-name="userName"
         :user-position="userPosition"
@@ -177,14 +201,18 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, ref, computed, watch } from "vue";
+import { onBeforeMount, ref, watch } from "vue";
 //@ts-ignore
 import BioComponent from "components/BioComponent.vue";
 import { useGeneralStore } from "src/stores/General";
 import { useUserStore } from "src/stores/User";
+import { useMeta } from "quasar";
 const general = useGeneralStore();
+const metaData = general.getMetadata();
+useMeta(metaData);
 const user = useUserStore();
 const userImage: any = ref(undefined);
+const color = ref("#402d6b");
 const userImagePath: any = ref(undefined);
 const userName: any = ref(undefined);
 const userPosition: any = ref(undefined);
@@ -215,12 +243,17 @@ const validateUrl = (val: string) => {
 };
 
 onBeforeMount(async () => {
+  console.log("On before mount");
   showLoading("Loading information...");
   const userInformation = await general.getUserById(user.userId);
+
   hideLoading();
   if (userInformation) {
     if (userInformation.credlyUsername) {
       getCertifications(userInformation.credlyUsername);
+    }
+    if (userInformation.color) {
+      color.value = userInformation.color;
     }
     userName.value = userInformation.fullName;
     userBio.value = userInformation.bio;
@@ -338,6 +371,7 @@ const onSubmit = async () => {
   showLoading("Saving information...");
   const response = await general.saveUserInformation(
     user.userId,
+    color.value,
     userImagePath.value,
     user.email,
     userName.value,

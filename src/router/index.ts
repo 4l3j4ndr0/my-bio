@@ -5,7 +5,7 @@ import {
   createWebHashHistory,
   createWebHistory,
 } from "vue-router";
-
+import { Cookies } from "quasar";
 import routes from "./routes";
 import routesUser from "./routesUser";
 import { useUserStore } from "src/stores/User";
@@ -19,12 +19,14 @@ import { useGeneralStore } from "src/stores/General";
  * with the Router instance.
  */
 
-export default route(async function (/* { store, ssrContext } */) {
+export default route(async function (
+  /* { store, ssrContext } */ { ssrContext }
+) {
   const user = useUserStore();
-  const hostname: any = window.location.hostname;
+  const hostname: string = ssrContext?.req?.headers?.host || "app.localhost";
+
   const parts = hostname.split(".");
   const subdomain = parts.length > 2 ? parts[0] : "app";
-  console.log(window.location);
 
   const createHistory = process.env.SERVER
     ? createMemoryHistory
@@ -42,9 +44,11 @@ export default route(async function (/* { store, ssrContext } */) {
   });
 
   Router.beforeEach(async (to, from, next) => {
+    const cookies = process.env.SERVER ? Cookies.parseSSR(ssrContext) : Cookies;
+    const token: any = cookies.get("token");
+
     if (subdomain === "app") {
       if (to.path === "/login") {
-        const token = await user.currentSession();
         if (token && token.idToken) {
           next({
             path: "/",
@@ -54,18 +58,12 @@ export default route(async function (/* { store, ssrContext } */) {
         }
       } else {
         if (to.path !== "/login") {
-          if (!user.token) {
+          if (!token) {
             next({
               path: "/login",
             });
           }
           next();
-        } else {
-          if (user.token) {
-            next({
-              path: "/",
-            });
-          }
         }
       }
     } else {

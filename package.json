@@ -7,8 +7,8 @@
   "private": true,
   "scripts": {
     "test": "echo \"No test specified\" && exit 0",
-    "dev": "quasar dev",
-    "build": "quasar build",
+    "dev": "quasar dev -m ssr",
+    "build": "quasar build -m ssr",
     "dev-pwa": "quasar dev -m pwa",
     "build-pwa": "quasar build --mode pwa",
     "amplify-sandbox": "npx ampx sandbox --profile sso-personal"

@@ -18,20 +18,20 @@ Amplify.configure({
   },
 });
 // Polyfill for 'global' object
-if (typeof global === "undefined") {
-  //@ts-ignore
-  window.global = window;
-}
+// if (typeof global === "undefined") {
+//   //@ts-ignore
+//   window.global = window;
+// }
 import { onBeforeMount, watch } from "vue";
 import { useRouter } from "vue-router";
 import { useUserStore } from "./stores/User";
 import { Hub } from "aws-amplify/utils";
+import { setCssVar } from "quasar";
 //@ts-ignore
 import mixin from "./mixins/mixin";
 const user = useUserStore();
 const router = useRouter();
 const { hideLoading } = mixin();
-
 watch(user, (val) => {
   if (val.$state.token) {
     hideLoading();
@@ -40,7 +40,10 @@ watch(user, (val) => {
 });
 
 onBeforeMount(async () => {
+  setCssVar("primary", "#402d6b");
+  user.currentSession();
   Hub.listen("auth", ({ payload }) => {
+    console.log("A new auth event has happened: ", payload);
     switch (payload.event) {
       case "signedIn":
         console.log("user have been signedIn successfully.");
