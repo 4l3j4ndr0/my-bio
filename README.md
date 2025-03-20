@@ -6,6 +6,7 @@ _[AWS Amplify Fullstack TypeScript Challenge ](https://dev.to/challenges/awschal
 
 ## Install the dependencies
 
+
 ```
 npm install
 ```
