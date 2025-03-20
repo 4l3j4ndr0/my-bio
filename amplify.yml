@@ -13,6 +13,7 @@ frontend:
     build:
       commands:
         - npm run build
+  artifacts:
     baseDirectory: dist/spa
     files:
       - "**/*"
