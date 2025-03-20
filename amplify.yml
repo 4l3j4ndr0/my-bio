@@ -10,15 +10,10 @@ frontend:
     preBuild:
       commands:
         - npm i
-        - npm run build
     build:
       commands:
         - npm run build
-        - ls -la dist # Para verificar contenido
-        - ls -la dist/ssr # Para verificar contenido
-        - ls -la .amplify-hosting # Para verificar si el manifiesto está aquí
-  artifacts:
-    baseDirectory: dist/ssr
+    baseDirectory: dist/spa
     files:
       - "**/*"
   cache:

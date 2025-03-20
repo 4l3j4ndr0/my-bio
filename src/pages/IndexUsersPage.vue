@@ -17,7 +17,7 @@
 
 <script setup lang="ts">
 import { onBeforeMount, ref } from "vue";
-import { useMeta } from "quasar";
+import { setCssVar, useMeta } from "quasar";
 //@ts-ignore
 import BioComponent from "components/BioComponent.vue";
 //@ts-ignore
@@ -47,6 +47,7 @@ onBeforeMount(async () => {
       userImage.value = await general.getPresignedUrl(user.image);
       if (user?.color) {
         primaryColor.value = user.color;
+        setCssVar("primary", primaryColor.value);
       }
 
       userSocialNetworks.value = user.socialNetwork?.map((i: any) =>
