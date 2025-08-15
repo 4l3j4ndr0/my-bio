@@ -338,7 +338,7 @@ watch(
 
 const validateUrl = (val: string) => {
   const pattern =
-    /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
+    /^(https?:\/\/)?([\w\-\.@]+\.)?[\w\-@]+\.(com|org|net|edu|gov|mil|int|co|io|me|ly|be|to|cc|tv|fm|am|info|biz|name|mobi|pro|travel|museum|aero|coop|jobs|tel|cat|asia|[a-z]{2,6})(\/[\w\-\._~:\/\?#\[\]@!$&'\(\)\*\+,;=%]*)?$/i;
   return pattern.test(val) || "Please enter a valid URL";
 };
 
