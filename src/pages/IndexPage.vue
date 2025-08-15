@@ -319,7 +319,7 @@ const sanitizeForSubdomain = (value: any) => {
 
 // Watch the userName for changes and sanitize it immediately
 watch(userName, (newValue, oldValue) => {
-  if (newValue) {
+  if (newValue && !user?.userId) {
     const sanitized = sanitizeForSubdomain(newValue);
     userSubdomain.value = sanitized;
   }
@@ -453,50 +453,156 @@ const openPreview = () => {
 };
 
 const onSubmit = async () => {
-  console.log("Submitting profile data...");
+  console.log("🚀 Starting profile submission...");
 
+  // Enhanced validation with detailed logging
   if (!userImage.value) {
+    console.error("❌ Validation failed: No profile image");
     showNoty("error", "Profile image is required");
     return;
   }
 
   if (!user.userId) {
-    showNoty("error", "User not authenticated");
+    console.error("❌ Validation failed: User not authenticated");
+    console.log("User object:", user);
+    showNoty("error", "User not authenticated. Please log in again.");
+    return;
+  }
+
+  if (!userName.value?.trim()) {
+    console.error("❌ Validation failed: No user name");
+    showNoty("error", "Full name is required");
+    return;
+  }
+
+  if (!userSubdomain.value?.trim()) {
+    console.error("❌ Validation failed: No subdomain");
+    showNoty("error", "Subdomain is required");
+    return;
+  }
+
+  if (!userPosition.value?.trim()) {
+    console.error("❌ Validation failed: No job position");
+    showNoty("error", "Job title is required");
     return;
   }
 
   try {
+    // Prepare social networks data
     let socialNetwork = [];
+    console.log(
+      "📱 Processing social networks:",
+      userSocialNetworks.value.length
+    );
+
     for (let i = 0; i < userSocialNetworks.value.length; i++) {
-      socialNetwork.push(JSON.stringify(userSocialNetworks.value[i]));
+      try {
+        const socialData = JSON.stringify(userSocialNetworks.value[i]);
+        socialNetwork.push(socialData);
+        console.log(
+          `  ✅ Social network ${i + 1} processed:`,
+          userSocialNetworks.value[i].name
+        );
+      } catch (socialError) {
+        console.error(
+          `❌ Error processing social network ${i + 1}:`,
+          socialError
+        );
+      }
     }
 
-    showLoading("Saving profile...");
-    console.log("Saving data for user:", user.userId);
+    // Log all data being sent
+    const submissionData = {
+      userId: user.userId,
+      color: color.value,
+      imagePath: userImagePath.value,
+      email: user.email,
+      fullName: userName.value.trim(),
+      subdomain: userSubdomain.value.trim(),
+      jobOcupation: userPosition.value.trim(),
+      bio: userBio.value?.trim() || "",
+      socialNetworkCount: socialNetwork.length,
+      credlyUser: userCredlyConnections.value[0]?.credlyUser || "",
+    };
 
+    console.log("📦 Submission data prepared:", submissionData);
+    console.log("🔍 Data validation:");
+    console.log("  - User ID:", !!submissionData.userId);
+    console.log("  - Color:", !!submissionData.color);
+    console.log("  - Image Path:", !!submissionData.imagePath);
+    console.log("  - Email:", !!submissionData.email);
+    console.log("  - Full Name:", !!submissionData.fullName);
+    console.log("  - Subdomain:", !!submissionData.subdomain);
+    console.log("  - Job Title:", !!submissionData.jobOcupation);
+    console.log("  - Bio Length:", submissionData.bio.length);
+    console.log("  - Social Networks:", submissionData.socialNetworkCount);
+
+    showLoading("Saving profile...");
+
+    console.log("🌐 Making API call to saveUserInformation...");
     const response = await general.saveUserInformation(
       user.userId,
       color.value,
       userImagePath.value,
       user.email,
-      userName.value,
+      userName.value.trim(),
       userSubdomain.value.trim(),
-      userPosition.value,
-      userBio.value,
+      userPosition.value.trim(),
+      userBio.value?.trim() || "",
       socialNetwork,
-      userCredlyConnections.value[0].credlyUser
+      userCredlyConnections.value[0]?.credlyUser || ""
     );
 
-    if (response.status) {
-      console.log("Profile saved successfully");
+    console.log("📡 API Response received:", response);
+
+    if (response && response.status) {
+      console.log("✅ Profile saved successfully");
       showNoty("success", "Profile saved successfully!");
+
+      // Update user store with new subdomain if needed
+      if (user.subdomain !== userSubdomain.value) {
+        user.subdomain = userSubdomain.value;
+        console.log("🔄 Updated user store subdomain:", user.subdomain);
+      }
     } else {
-      console.error("Failed to save profile:", response.message);
-      showNoty("error", response.message);
+      console.error("❌ Save failed - API returned error:");
+      console.error("  - Response:", response);
+      console.error("  - Status:", response?.status);
+      console.error("  - Message:", response?.message);
+
+      const errorMessage =
+        response?.message || "Unknown error occurred while saving";
+      showNoty("error", `Save failed: ${errorMessage}`);
     }
   } catch (error) {
-    console.error("Error saving profile:", error);
-    showNoty("error", "Failed to save profile");
+    console.error("❌ Critical error during profile save:");
+    console.error("  - Error message:", error.message);
+    console.error("  - Error stack:", error.stack);
+    console.error("  - User ID:", user.userId);
+    console.error("  - Full error object:", error);
+
+    // More specific error messages
+    if (
+      error.message?.includes("network") ||
+      error.message?.includes("fetch")
+    ) {
+      showNoty(
+        "error",
+        "Network error. Please check your connection and try again."
+      );
+    } else if (
+      error.message?.includes("unauthorized") ||
+      error.message?.includes("401")
+    ) {
+      showNoty("error", "Session expired. Please log in again.");
+    } else if (error.message?.includes("validation")) {
+      showNoty(
+        "error",
+        "Data validation error. Please check all required fields."
+      );
+    } else {
+      showNoty("error", `Save failed: ${error.message || "Unknown error"}`);
+    }
   } finally {
     hideLoading();
   }
@@ -510,27 +616,64 @@ const loadUserData = async () => {
 
   try {
     showLoading("Loading profile...");
+    console.log("🔍 Loading user data for userId:", user.userId);
     const userInformation = await general.getUserById(user.userId);
+    console.log("📦 Raw user information received:", userInformation);
 
     if (userInformation) {
       // Load certifications first if available
       if (userInformation.credlyUsername) {
+        console.log(
+          "🏆 Loading certifications for:",
+          userInformation.credlyUsername
+        );
         getCertifications(userInformation.credlyUsername);
       }
 
-      // Set basic information
+      // Set basic information with detailed logging
       if (userInformation.color) {
         color.value = userInformation.color;
+        console.log("🎨 Color set to:", userInformation.color);
       }
+
       userName.value = userInformation.fullName || "";
+      console.log("👤 Name set to:", userName.value);
+
       userBio.value = userInformation.bio || "";
+      console.log("📝 Bio set to:", userBio.value?.substring(0, 50) + "...");
+
       userPosition.value = userInformation.jobOcupation || "";
-      userSubdomain.value = userInformation.subdomain || "";
+      console.log("💼 Position set to:", userPosition.value);
+
+      // CRITICAL: Subdomain assignment with detailed logging
+      const receivedSubdomain = userInformation.subdomain;
+      console.log("🌐 Received subdomain from API:", receivedSubdomain);
+      console.log("🔍 Subdomain type:", typeof receivedSubdomain);
+      console.log("❓ Subdomain is null/undefined:", receivedSubdomain == null);
+      console.log("📏 Subdomain length:", receivedSubdomain?.length);
+
+      if (receivedSubdomain && receivedSubdomain.trim()) {
+        userSubdomain.value = receivedSubdomain.trim();
+        console.log("✅ Subdomain successfully set to:", userSubdomain.value);
+      } else {
+        console.warn("⚠️ No valid subdomain received from API");
+        console.log("🔄 Current userSubdomain.value:", userSubdomain.value);
+
+        // Don't overwrite if we don't have a subdomain from API
+        if (!userSubdomain.value && userName.value) {
+          // Generate from name as fallback
+          const fallbackSubdomain = sanitizeForSubdomain(userName.value);
+          userSubdomain.value = fallbackSubdomain;
+          console.log("🆘 Generated fallback subdomain:", fallbackSubdomain);
+        }
+      }
 
       // Load image if available
       if (userInformation.image) {
+        console.log("🖼️ Loading image:", userInformation.image);
         userImage.value = await general.getPresignedUrl(userInformation.image);
         userImagePath.value = userInformation.image;
+        console.log("✅ Image loaded successfully");
       }
 
       // Set Credly connections
@@ -539,24 +682,51 @@ const loadUserData = async () => {
           credlyUser: userInformation.credlyUsername || "",
         },
       ];
+      console.log("🔗 Credly connections set:", userCredlyConnections.value);
 
       // Load social networks
       if (
         userInformation.socialNetwork &&
         userInformation.socialNetwork.length > 0
       ) {
-        userSocialNetworks.value = userInformation.socialNetwork.map((i: any) =>
-          JSON.parse(i)
-        );
+        try {
+          userSocialNetworks.value = userInformation.socialNetwork.map(
+            (i: any) => JSON.parse(i)
+          );
+          console.log(
+            "📱 Social networks loaded:",
+            userSocialNetworks.value.length,
+            "networks"
+          );
+        } catch (socialError) {
+          console.error("❌ Error parsing social networks:", socialError);
+        }
       }
 
-      console.log("User data loaded successfully");
+      console.log("✅ User data loaded successfully");
+      console.log("📊 Final state summary:");
+      console.log("  - Name:", userName.value);
+      console.log("  - Subdomain:", userSubdomain.value);
+      console.log("  - Position:", userPosition.value);
+      console.log("  - Has Image:", !!userImage.value);
     } else {
-      console.log("No user information found");
+      console.error("❌ No user information received from API");
+      showNoty(
+        "error",
+        "No profile data found. Please try refreshing the page."
+      );
     }
   } catch (error) {
-    console.error("Error loading user data:", error);
-    showNoty("error", "Failed to load profile data");
+    console.error("❌ Critical error loading user data:", error);
+    console.error("Error details:", {
+      message: error.message,
+      stack: error.stack,
+      userId: user.userId,
+    });
+    showNoty(
+      "error",
+      "Failed to load profile data. Please check your connection and try again."
+    );
   } finally {
     hideLoading();
   }
