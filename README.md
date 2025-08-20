@@ -146,7 +146,7 @@ npx ampx sandbox
 
    ```bash
    git clone https://github.com/4l3j4ndr0/my-bio.git
-   cd bio-platform
+   cd my-bio
    npm install
    ```
 
@@ -160,17 +160,7 @@ npx ampx sandbox
    npx ampx sandbox --profile your-aws-profile
    ```
 
-3. **Environment Setup**
-
-   ```bash
-   # Copy environment template
-   cp .env.example .env.local
-
-   # Edit your environment variables
-   nano .env.local
-   ```
-
-4. **Database Initialization**
+3. **Database Initialization**
 
    ```bash
    # Deploy AWS resources
@@ -178,94 +168,6 @@ npx ampx sandbox
 
    # The database schema will be automatically created
    ```
-
----
-
-## ⚙️ Configuration
-
-### Environment Variables
-
-```env
-# AWS Configuration
-VITE_AWS_REGION=us-east-1
-VITE_AWS_USER_POOL_ID=your-user-pool-id
-VITE_AWS_USER_POOL_CLIENT_ID=your-client-id
-
-# Application Settings
-VITE_APP_NAME=BIO Platform
-VITE_BASE_DOMAIN=bio.awslearn.cloud
-```
-
-### Quasar Configuration
-
-The application uses Quasar Framework with the following key configurations:
-
-```javascript
-// quasar.config.js highlights
-framework: {
-  plugins: ['Notify', 'Loading', 'Dialog', 'LocalStorage', 'Meta'],
-  config: {
-    brand: {
-      primary: '#402d6b',
-      secondary: '#26a653'
-    }
-  }
-}
-```
-
-### AWS Amplify Configuration
-
-```typescript
-// amplify/backend.ts
-const backend = defineBackend({
-  auth, // Cognito User Pools
-  data, // DynamoDB with GraphQL
-  storage, // S3 Bucket
-  CredlyBadgesFunction, // Lambda for Credly API
-});
-```
-
----
-
-## 🎨 Customization
-
-### Theme Customization
-
-```typescript
-// Custom color themes
-const customTheme = {
-  primary: "#402d6b",
-  secondary: "#26a653",
-  accent: "#9C27B0",
-  dark: "#1d1d1d",
-  positive: "#21BA45",
-  negative: "#C10015",
-};
-```
-
-### Component Customization
-
-```vue
-<!-- Custom BioComponent styling -->
-<template>
-  <q-page class="flex flex-center">
-    <div id="particles-js" :style="particlesStyle"></div>
-    <!-- Your custom content -->
-  </q-page>
-</template>
-```
-
-### Adding New Social Networks
-
-```typescript
-// In stores/General.ts
-const newSocialNetwork = {
-  icon: "fab fa-your-platform",
-  url: "",
-  name: "Your Platform",
-  show: false,
-};
-```
 
 ---
 
@@ -403,19 +305,6 @@ export const useUserStore = defineStore("user", {
 });
 ```
 
-### Testing Strategy
-
-```bash
-# Unit tests (when implemented)
-npm run test:unit
-
-# E2E tests (when implemented)
-npm run test:e2e
-
-# Component testing
-npm run test:component
-```
-
 ---
 
 ## 🚀 Deployment
@@ -460,98 +349,6 @@ npx ampx sandbox --profile staging
 
 # Production
 npx ampx sandbox --profile production
-```
-
----
-
-## 🧪 Testing
-
-### Testing Framework Setup
-
-```bash
-# Install testing dependencies
-npm install --save-dev @vue/test-utils vitest jsdom
-
-# Run tests
-npm run test
-```
-
-### Example Test Cases
-
-```typescript
-// tests/components/BioComponent.spec.ts
-import { mount } from "@vue/test-utils";
-import BioComponent from "src/components/BioComponent.vue";
-
-describe("BioComponent", () => {
-  it("renders user information correctly", () => {
-    const wrapper = mount(BioComponent, {
-      props: {
-        userName: "John Doe",
-        userPosition: "Developer",
-      },
-    });
-
-    expect(wrapper.text()).toContain("John Doe");
-    expect(wrapper.text()).toContain("Developer");
-  });
-});
-```
-
----
-
-## 📚 API Reference
-
-### Authentication Endpoints
-
-```typescript
-// User authentication
-POST / auth / login;
-POST / auth / register;
-POST / auth / logout;
-GET / auth / user;
-```
-
-### User Management
-
-```typescript
-// User CRUD operations
-GET / api / users / { id };
-PUT / api / users / { id };
-DELETE / api / users / { id };
-GET / api / users / subdomain / { subdomain };
-```
-
-### File Upload
-
-```typescript
-// Image upload to S3
-POST / api / upload / image;
-GET / api / upload / presigned - url;
-```
-
-### Credly Integration
-
-```typescript
-// Certification badges
-GET /api/badges?userName={credlyUsername}
-```
-
-### GraphQL Schema
-
-```graphql
-type User {
-  id: ID!
-  color: String
-  image: String!
-  email: String!
-  fullName: String!
-  subdomain: String!
-  jobOcupation: String!
-  bio: String!
-  socialNetwork: [String]
-  credlyUsername: String
-}
 ```
 
 ---
@@ -691,83 +488,6 @@ const validateUrl = (val: string) => {
 
 ---
 
-## 📈 Analytics & Monitoring
-
-### Built-in Analytics
-
-- **User Engagement**: Profile view tracking
-- **Performance Metrics**: Page load times and user interactions
-- **Error Monitoring**: Automatic error reporting and logging
-- **Usage Statistics**: Feature adoption and user behavior
-
-### Monitoring Setup
-
-```typescript
-// CloudWatch integration
-import { Logger } from "@aws-amplify/core";
-
-const logger = new Logger("BioApp");
-logger.info("User profile created", { userId, subdomain });
-```
-
----
-
-## 🌍 Internationalization
-
-### Multi-language Support
-
-```typescript
-// i18n configuration
-const messages = {
-  en: {
-    welcome: "Welcome to BIO Platform",
-    createProfile: "Create Your Profile",
-  },
-  es: {
-    welcome: "Bienvenido a BIO Platform",
-    createProfile: "Crea Tu Perfil",
-  },
-};
-```
-
----
-
-## 📱 Mobile App (Future)
-
-### Planned Mobile Features
-
-- **React Native App**: Native mobile experience
-- **Offline Support**: Profile caching for offline viewing
-- **Push Notifications**: Profile update notifications
-- **QR Code Sharing**: Easy profile sharing via QR codes
-
----
-
-## 🎯 Roadmap
-
-### Short Term (Q1 2024)
-
-- [ ] Enhanced theme customization
-- [ ] Additional certification providers
-- [ ] Advanced analytics dashboard
-- [ ] Mobile app development
-
-### Medium Term (Q2-Q3 2024)
-
-- [ ] Team/Organization profiles
-- [ ] Custom domain support
-- [ ] Advanced SEO features
-- [ ] Integration marketplace
-
-### Long Term (Q4 2024+)
-
-- [ ] AI-powered profile optimization
-- [ ] Video introduction support
-- [ ] Portfolio project showcase
-- [ ] Professional networking features
-
----
-
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
@@ -786,8 +506,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 <div align="center">
 
-**Made with ❤️ by the BIO Platform Team**
+**Made with ❤️ by Alejandro Castaneda Ocampo**
 
-[⭐ Star us on GitHub](https://github.com/4l3j4ndr0/my-bio) • [🐦 Follow on Twitter](https://twitter.com/bioplatform) • [💼 LinkedIn](https://linkedin.com/company/bio-platform)
+[⭐ Star us on GitHub](https://github.com/4l3j4ndr0/my-bio)
 
 </div>
