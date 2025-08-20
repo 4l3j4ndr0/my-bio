@@ -1,5 +1,7 @@
 # 🚀 BIO Platform - Personal Biography & Portfolio Builder
 
+![AWS Diagram](public/AwsDiagram.png)
+
 <div align="center">
 
 ![BIO Platform](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/9f74dqx4t3vim61ckopf.png)
@@ -10,9 +12,9 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![AWS CDK](https://img.shields.io/badge/AWS-CDK-FF9900?style=for-the-badge&logo=amazon-aws&logoColor=white)](https://aws.amazon.com/cdk/)
 
-*Create stunning personal biography websites with professional portfolios, social media integration, and Credly certifications showcase*
+_Create stunning personal biography websites with professional portfolios, social media integration, and Credly certifications showcase_
 
-[🌟 Live Demo](https://bio.awslearn.cloud) • [📖 Documentation](#documentation) • [🚀 Quick Start](#quick-start) • [🤝 Contributing](#contributing)
+• [📖 Documentation](#documentation) • [🚀 Quick Start](#quick-start) • [🤝 Contributing](#contributing)
 
 </div>
 
@@ -39,30 +41,35 @@
 ## ✨ Features
 
 ### 🎯 Core Functionality
+
 - **🎨 Dynamic Personal Profiles**: Create beautiful, responsive biography pages with custom themes
 - **🌐 Custom Subdomains**: Each user gets their own subdomain (e.g., `yourname.bio.awslearn.cloud`)
 - **📱 Responsive Design**: Optimized for desktop, tablet, and mobile devices
 - **🎭 Interactive Animations**: Particle.js animations with customizable colors and effects
 
 ### 🔗 Social Media Integration
+
 - **📲 Multi-Platform Support**: LinkedIn, GitHub, Medium, Facebook, Instagram, YouTube, Twitter/X
 - **🔗 Smart URL Validation**: Automatic validation of social media URLs
 - **👁️ Visibility Controls**: Show/hide specific social networks on your profile
 - **🎯 One-Click Redirects**: Direct links to all your social platforms
 
 ### 🏆 Professional Certifications
+
 - **🎓 Credly Integration**: Automatic fetching and display of Credly badges
 - **🔄 Real-time Updates**: Sync your latest certifications automatically
 - **🖼️ Visual Badge Display**: Professional badge showcase with click-to-verify functionality
 - **📊 Certification Management**: Easy management of multiple certification providers
 
 ### 🔐 Authentication & Security
+
 - **🔒 AWS Cognito Integration**: Secure user authentication and authorization
 - **👤 User Management**: Complete user profile management system
 - **🛡️ Role-based Access**: Secure API endpoints with proper authorization
 - **🔑 Session Management**: Automatic token refresh and session handling
 
 ### 🎨 Customization Options
+
 - **🌈 Color Themes**: Custom color picker for personalized branding
 - **📸 Image Upload**: Secure image storage with AWS S3 integration
 - **✏️ Rich Text Editing**: Comprehensive biography and description editing
@@ -73,6 +80,7 @@
 ## 🏗️ Architecture
 
 ### Frontend Stack
+
 ```
 Vue.js 3 (Composition API) + TypeScript
 ├── 🖼️ Quasar Framework (UI Components)
@@ -83,6 +91,7 @@ Vue.js 3 (Composition API) + TypeScript
 ```
 
 ### Backend Infrastructure (AWS)
+
 ```
 AWS Amplify Fullstack
 ├── 🔐 Amazon Cognito (Authentication)
@@ -94,6 +103,7 @@ AWS Amplify Fullstack
 ```
 
 ### Key Components Architecture
+
 ```
 src/
 ├── 📄 pages/
@@ -119,12 +129,14 @@ src/
 ## 🚀 Quick Start
 
 ### Prerequisites
+
 - **Node.js** 18+ or 20+
 - **npm** 6.13.4+
 - **AWS Account** with appropriate permissions
 - **AWS CLI** configured (optional but recommended)
 
 ### 1-Minute Setup
+
 ```bash
 # Clone the repository
 git clone https://github.com/yourusername/bio-platform.git
@@ -149,6 +161,7 @@ npx ampx sandbox
 ### Detailed Installation Steps
 
 1. **Clone and Setup**
+
    ```bash
    git clone https://github.com/yourusername/bio-platform.git
    cd bio-platform
@@ -156,28 +169,31 @@ npx ampx sandbox
    ```
 
 2. **AWS Configuration**
+
    ```bash
    # Configure AWS credentials (if not already done)
    aws configure
-   
+
    # Or use AWS profiles
    npx ampx sandbox --profile your-aws-profile
    ```
 
 3. **Environment Setup**
+
    ```bash
    # Copy environment template
    cp .env.example .env.local
-   
+
    # Edit your environment variables
    nano .env.local
    ```
 
 4. **Database Initialization**
+
    ```bash
    # Deploy AWS resources
    npx ampx sandbox
-   
+
    # The database schema will be automatically created
    ```
 
@@ -186,6 +202,7 @@ npx ampx sandbox
 ## ⚙️ Configuration
 
 ### Environment Variables
+
 ```env
 # AWS Configuration
 VITE_AWS_REGION=us-east-1
@@ -198,6 +215,7 @@ VITE_BASE_DOMAIN=bio.awslearn.cloud
 ```
 
 ### Quasar Configuration
+
 The application uses Quasar Framework with the following key configurations:
 
 ```javascript
@@ -214,13 +232,14 @@ framework: {
 ```
 
 ### AWS Amplify Configuration
+
 ```typescript
 // amplify/backend.ts
 const backend = defineBackend({
-  auth,      // Cognito User Pools
-  data,      // DynamoDB with GraphQL
-  storage,   // S3 Bucket
-  CredlyBadgesFunction // Lambda for Credly API
+  auth, // Cognito User Pools
+  data, // DynamoDB with GraphQL
+  storage, // S3 Bucket
+  CredlyBadgesFunction, // Lambda for Credly API
 });
 ```
 
@@ -229,19 +248,21 @@ const backend = defineBackend({
 ## 🎨 Customization
 
 ### Theme Customization
+
 ```typescript
 // Custom color themes
 const customTheme = {
-  primary: '#402d6b',
-  secondary: '#26a653',
-  accent: '#9C27B0',
-  dark: '#1d1d1d',
-  positive: '#21BA45',
-  negative: '#C10015'
+  primary: "#402d6b",
+  secondary: "#26a653",
+  accent: "#9C27B0",
+  dark: "#1d1d1d",
+  positive: "#21BA45",
+  negative: "#C10015",
 };
 ```
 
 ### Component Customization
+
 ```vue
 <!-- Custom BioComponent styling -->
 <template>
@@ -253,13 +274,14 @@ const customTheme = {
 ```
 
 ### Adding New Social Networks
+
 ```typescript
 // In stores/General.ts
 const newSocialNetwork = {
-  icon: 'fab fa-your-platform',
-  url: '',
-  name: 'Your Platform',
-  show: false
+  icon: "fab fa-your-platform",
+  url: "",
+  name: "Your Platform",
+  show: false,
 };
 ```
 
@@ -270,22 +292,26 @@ const newSocialNetwork = {
 ### For End Users
 
 1. **Create Account**
+
    - Visit the platform and sign up with email
    - Verify your email address
    - Complete your profile setup
 
 2. **Build Your Profile**
+
    - Upload a professional photo
    - Add your personal information
    - Write a compelling biography
    - Choose your custom subdomain
 
 3. **Add Social Networks**
+
    - Connect your LinkedIn, GitHub, and other profiles
    - Toggle visibility for each platform
    - Validate URLs automatically
 
 4. **Showcase Certifications**
+
    - Connect your Credly account
    - Automatically sync your badges
    - Display professional certifications
@@ -298,18 +324,20 @@ const newSocialNetwork = {
 ### For Developers
 
 #### Adding New Features
+
 ```typescript
 // Example: Adding a new certification provider
-export const useGeneralStore = defineStore('general', {
+export const useGeneralStore = defineStore("general", {
   actions: {
     async getNewProviderCertifications(username: string) {
       // Implementation for new provider
-    }
-  }
+    },
+  },
 });
 ```
 
 #### Custom Components
+
 ```vue
 <template>
   <bio-component
@@ -329,6 +357,7 @@ export const useGeneralStore = defineStore('general', {
 ## 🔧 Development
 
 ### Development Commands
+
 ```bash
 # Start development server
 npm run dev
@@ -352,6 +381,7 @@ npx ampx sandbox --profile your-profile
 ### Code Structure Best Practices
 
 #### Vue 3 Composition API
+
 ```typescript
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue';
@@ -371,26 +401,28 @@ onMounted(async () => {
 ```
 
 #### Pinia Store Pattern
+
 ```typescript
-export const useUserStore = defineStore('user', {
+export const useUserStore = defineStore("user", {
   state: () => ({
     currentUser: null,
-    isAuthenticated: false
+    isAuthenticated: false,
   }),
-  
+
   getters: {
-    userName: (state) => state.currentUser?.name || ''
+    userName: (state) => state.currentUser?.name || "",
   },
-  
+
   actions: {
     async login(credentials) {
       // Authentication logic
-    }
-  }
+    },
+  },
 });
 ```
 
 ### Testing Strategy
+
 ```bash
 # Unit tests (when implemented)
 npm run test:unit
@@ -407,6 +439,7 @@ npm run test:component
 ## 🚀 Deployment
 
 ### AWS Amplify Deployment
+
 ```bash
 # Deploy to AWS
 npx ampx sandbox deploy
@@ -416,12 +449,15 @@ npx ampx sandbox deploy --profile production
 ```
 
 ### Manual Deployment Steps
+
 1. **Build the application**
+
    ```bash
    npm run build
    ```
 
 2. **Deploy AWS resources**
+
    ```bash
    npx ampx sandbox deploy
    ```
@@ -432,6 +468,7 @@ npx ampx sandbox deploy --profile production
    - Update DNS records
 
 ### Environment-Specific Deployments
+
 ```bash
 # Development
 npx ampx sandbox --profile dev
@@ -448,6 +485,7 @@ npx ampx sandbox --profile production
 ## 🧪 Testing
 
 ### Testing Framework Setup
+
 ```bash
 # Install testing dependencies
 npm install --save-dev @vue/test-utils vitest jsdom
@@ -457,22 +495,23 @@ npm run test
 ```
 
 ### Example Test Cases
+
 ```typescript
 // tests/components/BioComponent.spec.ts
-import { mount } from '@vue/test-utils';
-import BioComponent from 'src/components/BioComponent.vue';
+import { mount } from "@vue/test-utils";
+import BioComponent from "src/components/BioComponent.vue";
 
-describe('BioComponent', () => {
-  it('renders user information correctly', () => {
+describe("BioComponent", () => {
+  it("renders user information correctly", () => {
     const wrapper = mount(BioComponent, {
       props: {
-        userName: 'John Doe',
-        userPosition: 'Developer'
-      }
+        userName: "John Doe",
+        userPosition: "Developer",
+      },
     });
-    
-    expect(wrapper.text()).toContain('John Doe');
-    expect(wrapper.text()).toContain('Developer');
+
+    expect(wrapper.text()).toContain("John Doe");
+    expect(wrapper.text()).toContain("Developer");
   });
 });
 ```
@@ -482,37 +521,42 @@ describe('BioComponent', () => {
 ## 📚 API Reference
 
 ### Authentication Endpoints
+
 ```typescript
 // User authentication
-POST /auth/login
-POST /auth/register
-POST /auth/logout
-GET  /auth/user
+POST / auth / login;
+POST / auth / register;
+POST / auth / logout;
+GET / auth / user;
 ```
 
 ### User Management
+
 ```typescript
 // User CRUD operations
-GET    /api/users/{id}
-PUT    /api/users/{id}
-DELETE /api/users/{id}
-GET    /api/users/subdomain/{subdomain}
+GET / api / users / { id };
+PUT / api / users / { id };
+DELETE / api / users / { id };
+GET / api / users / subdomain / { subdomain };
 ```
 
 ### File Upload
+
 ```typescript
 // Image upload to S3
-POST /api/upload/image
-GET  /api/upload/presigned-url
+POST / api / upload / image;
+GET / api / upload / presigned - url;
 ```
 
 ### Credly Integration
+
 ```typescript
 // Certification badges
 GET /api/badges?userName={credlyUsername}
 ```
 
 ### GraphQL Schema
+
 ```graphql
 type User {
   id: ID!
@@ -535,6 +579,7 @@ type User {
 We welcome contributions! Here's how you can help:
 
 ### Getting Started
+
 1. **Fork the repository**
 2. **Create a feature branch**
    ```bash
@@ -553,6 +598,7 @@ We welcome contributions! Here's how you can help:
 7. **Open a Pull Request**
 
 ### Development Guidelines
+
 - Follow Vue 3 Composition API patterns
 - Use TypeScript for type safety
 - Follow Quasar Framework conventions
@@ -561,6 +607,7 @@ We welcome contributions! Here's how you can help:
 - Ensure responsive design compatibility
 
 ### Code Style
+
 ```bash
 # Format code
 npm run format
@@ -579,12 +626,14 @@ npm run type-check
 ### Common Issues
 
 #### 1. TypeScript Configuration Error
+
 ```bash
 # Error: failed to resolve "extends":"@quasar/app-vite/tsconfig-preset"
 # Solution: Update tsconfig.json with complete configuration
 ```
 
 #### 2. AWS Amplify Sandbox Issues
+
 ```bash
 # Clean and restart
 npx quasar clean --qconf
@@ -592,6 +641,7 @@ npx ampx sandbox
 ```
 
 #### 3. Node.js Version Compatibility
+
 ```bash
 # Use Node.js 18+ or 20+
 nvm use 20
@@ -599,6 +649,7 @@ npm install
 ```
 
 #### 4. Dependency Issues
+
 ```bash
 # Clear cache and reinstall
 rm -rf node_modules package-lock.json
@@ -606,6 +657,7 @@ npm install
 ```
 
 ### Debug Mode
+
 ```bash
 # Enable debug logging
 DEBUG=* npm run dev
@@ -619,12 +671,14 @@ AWS_AMPLIFY_DEBUG=true npm run dev
 ## 📊 Performance Optimization
 
 ### Frontend Optimization
+
 - **Code Splitting**: Automatic route-based code splitting
 - **Lazy Loading**: Components loaded on demand
 - **Image Optimization**: WebP format support with fallbacks
 - **Caching**: Intelligent browser caching strategies
 
 ### Backend Optimization
+
 - **Lambda Cold Start**: Optimized function packaging
 - **DynamoDB**: Efficient query patterns and indexing
 - **S3**: CloudFront CDN integration for global delivery
@@ -635,6 +689,7 @@ AWS_AMPLIFY_DEBUG=true npm run dev
 ## 🔒 Security
 
 ### Security Features
+
 - **Authentication**: AWS Cognito with MFA support
 - **Authorization**: Role-based access control
 - **Data Encryption**: At-rest and in-transit encryption
@@ -642,11 +697,13 @@ AWS_AMPLIFY_DEBUG=true npm run dev
 - **CORS**: Properly configured cross-origin policies
 
 ### Security Best Practices
+
 ```typescript
 // Input validation example
 const validateUrl = (val: string) => {
-  const pattern = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
-  return pattern.test(val) || 'Please enter a valid URL';
+  const pattern =
+    /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
+  return pattern.test(val) || "Please enter a valid URL";
 };
 ```
 
@@ -655,18 +712,20 @@ const validateUrl = (val: string) => {
 ## 📈 Analytics & Monitoring
 
 ### Built-in Analytics
+
 - **User Engagement**: Profile view tracking
 - **Performance Metrics**: Page load times and user interactions
 - **Error Monitoring**: Automatic error reporting and logging
 - **Usage Statistics**: Feature adoption and user behavior
 
 ### Monitoring Setup
+
 ```typescript
 // CloudWatch integration
-import { Logger } from '@aws-amplify/core';
+import { Logger } from "@aws-amplify/core";
 
-const logger = new Logger('BioApp');
-logger.info('User profile created', { userId, subdomain });
+const logger = new Logger("BioApp");
+logger.info("User profile created", { userId, subdomain });
 ```
 
 ---
@@ -674,17 +733,18 @@ logger.info('User profile created', { userId, subdomain });
 ## 🌍 Internationalization
 
 ### Multi-language Support
+
 ```typescript
 // i18n configuration
 const messages = {
   en: {
-    welcome: 'Welcome to BIO Platform',
-    createProfile: 'Create Your Profile'
+    welcome: "Welcome to BIO Platform",
+    createProfile: "Create Your Profile",
   },
   es: {
-    welcome: 'Bienvenido a BIO Platform',
-    createProfile: 'Crea Tu Perfil'
-  }
+    welcome: "Bienvenido a BIO Platform",
+    createProfile: "Crea Tu Perfil",
+  },
 };
 ```
 
@@ -693,6 +753,7 @@ const messages = {
 ## 📱 Mobile App (Future)
 
 ### Planned Mobile Features
+
 - **React Native App**: Native mobile experience
 - **Offline Support**: Profile caching for offline viewing
 - **Push Notifications**: Profile update notifications
@@ -703,18 +764,21 @@ const messages = {
 ## 🎯 Roadmap
 
 ### Short Term (Q1 2024)
+
 - [ ] Enhanced theme customization
 - [ ] Additional certification providers
 - [ ] Advanced analytics dashboard
 - [ ] Mobile app development
 
 ### Medium Term (Q2-Q3 2024)
+
 - [ ] Team/Organization profiles
 - [ ] Custom domain support
 - [ ] Advanced SEO features
 - [ ] Integration marketplace
 
 ### Long Term (Q4 2024+)
+
 - [ ] AI-powered profile optimization
 - [ ] Video introduction support
 - [ ] Portfolio project showcase
@@ -741,12 +805,14 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📞 Support
 
 ### Get Help
+
 - 📧 **Email**: support@bio.awslearn.cloud
 - 💬 **Discord**: [Join our community](https://discord.gg/bio-platform)
 - 📖 **Documentation**: [Full documentation](https://docs.bio.awslearn.cloud)
 - 🐛 **Issues**: [GitHub Issues](https://github.com/yourusername/bio-platform/issues)
 
 ### Professional Support
+
 For enterprise support, custom development, or consulting services, please contact us at enterprise@bio.awslearn.cloud
 
 ---
