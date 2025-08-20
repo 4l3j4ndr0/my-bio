@@ -20,24 +20,6 @@ _Create stunning personal biography websites with professional portfolios, socia
 
 ---
 
-## 📋 Table of Contents
-
-- [✨ Features](#-features)
-- [🏗️ Architecture](#️-architecture)
-- [🚀 Quick Start](#-quick-start)
-- [🛠️ Installation](#️-installation)
-- [⚙️ Configuration](#️-configuration)
-- [🎨 Customization](#-customization)
-- [📱 Usage](#-usage)
-- [🔧 Development](#-development)
-- [🚀 Deployment](#-deployment)
-- [🧪 Testing](#-testing)
-- [📚 API Reference](#-api-reference)
-- [🤝 Contributing](#-contributing)
-- [📄 License](#-license)
-
----
-
 ## ✨ Features
 
 ### 🎯 Core Functionality
@@ -139,7 +121,7 @@ src/
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/bio-platform.git
+git clone https://github.com/4l3j4ndr0/my-bio.git
 cd bio-platform
 
 # Install dependencies
@@ -163,7 +145,7 @@ npx ampx sandbox
 1. **Clone and Setup**
 
    ```bash
-   git clone https://github.com/yourusername/bio-platform.git
+   git clone https://github.com/4l3j4ndr0/my-bio.git
    cd bio-platform
    npm install
    ```
@@ -802,25 +784,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-## 📞 Support
-
-### Get Help
-
-- 📧 **Email**: support@bio.awslearn.cloud
-- 💬 **Discord**: [Join our community](https://discord.gg/bio-platform)
-- 📖 **Documentation**: [Full documentation](https://docs.bio.awslearn.cloud)
-- 🐛 **Issues**: [GitHub Issues](https://github.com/yourusername/bio-platform/issues)
-
-### Professional Support
-
-For enterprise support, custom development, or consulting services, please contact us at enterprise@bio.awslearn.cloud
-
----
-
 <div align="center">
 
 **Made with ❤️ by the BIO Platform Team**
 
-[⭐ Star us on GitHub](https://github.com/yourusername/bio-platform) • [🐦 Follow on Twitter](https://twitter.com/bioplatform) • [💼 LinkedIn](https://linkedin.com/company/bio-platform)
+[⭐ Star us on GitHub](https://github.com/4l3j4ndr0/my-bio) • [🐦 Follow on Twitter](https://twitter.com/bioplatform) • [💼 LinkedIn](https://linkedin.com/company/bio-platform)
 
 </div>
