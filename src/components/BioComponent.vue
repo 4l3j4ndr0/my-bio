@@ -3,13 +3,9 @@
     <div id="particles-js" :style="particlesStyle"></div>
     <div
       class="animated bounceInUp q-mt-lg"
-      v-bind:style="
-        $q.screen.lt.sm
-          ? { width: '90%', 'padding-top': '100px' }
-          : { width: '35%' }
-      "
+      v-bind:style="$q.screen.lt.sm ? { width: '90%' } : { width: '35%' }"
     >
-      <q-card class="bg-white q-mt-lg profile-card" style="margin-top: 50px">
+      <q-card class="bg-white q-mt-lg profile-card">
         <q-card-section>
           <q-avatar
             style="
